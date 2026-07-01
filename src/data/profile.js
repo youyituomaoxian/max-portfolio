@@ -10,15 +10,14 @@ const _previewData = typeof window !== 'undefined' && window.sessionStorage
 
 const _baseProfile = {
   "name": "马守坤",
-  "nameEn": "Ma Shoukun",
+  "nameEn": "Max",
   "heroVideo": "/videos/hero-bg.mp4",
-  "avatar": null,
   "roles": [
     "视觉设计师",
     "AI设计师",
     "品牌设计师"
   ],
-  "bio": "拥有多领域背景的全链路设计师。过去10年，跨越品牌设计、三维可视化、空间规划与数字产品设计等多个领域，积累了从前期概念到最终落地的完整设计经验。相信好的设计不止于美观——它应该传递价值、解决问题，并在商业与艺术之间找到平衡。",
+  "bio": "拥有多领域背景的全链路设计师。过去10年，跨越品牌设计、UI/UX设计、三维可视化、空间规划与数字产品设计等多个领域，积累了从前期概念到最终落地的完整设计经验。相信好的设计不止于美观——它应该传递价值、解决问题，并在商业与艺术之间找到平衡。",
   "stats": [
     {
       "value": "10+",
@@ -139,10 +138,10 @@ const _baseProfile = {
   "projects": [
     {
       "id": 1,
-      "title": "WorkBuddy 品牌视觉体系",
+      "title": "品牌视觉体系",
       "category": "品牌设计",
       "date": "2026-06",
-      "description": "为 WorkBuddy AI 智能助手打造完整的品牌视觉识别系统，涵盖Logo设计、色彩系统、应用场景延展。",
+      "description": "弘讯科技于集团40周年庆的时机，集团统一规范、更新VI手册，有利于更好的适应现在集团的状况，并增强集团形象的宣传。",
       "image": null,
       "tags": [
         "VI系统",
@@ -408,20 +407,11 @@ const _baseProfile = {
       {
         "type": "official",
         "mode": "qrcode",
-        "value": null
-      },
-      {
-        "type": "behance",
-        "mode": "link",
-        "value": null
-      },
-      {
-        "type": "zcool",
-        "mode": "link",
-        "value": null
+        "value": "/images/微信公众号.jpg"
       }
     ]
-  }
+  },
+  "avatar": "/images/max.png"
 };
 
 export const profile = _previewData || _baseProfile;
