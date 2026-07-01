@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mask-portfolio.pages.dev/sitemap.xml

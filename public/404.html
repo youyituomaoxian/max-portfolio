@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — 页面未找到 / Page Not Found</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: #0A0A0A;
+      color: #FFFFFF;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    /* ---- Grid Texture ---- */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      opacity: 0.04;
+      pointer-events: none;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.8) 1px, transparent 0);
+      background-size: 60px 60px;
+    }
+
+    /* ---- Glow Orbs ---- */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.06;
+      pointer-events: none;
+    }
+    .orb-1 { width: 600px; height: 600px; top: -10%; left: -10%; background: #FF6B00; }
+    .orb-2 { width: 500px; height: 500px; bottom: -10%; right: -10%; background: #FF8A33; }
+
+    /* ---- Main Container ---- */
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      user-select: none;
+    }
+
+    /* ---- 404 Number ---- */
+    .code {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(8rem, 20vw, 16rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #FF6B00;
+      opacity: 0;
+      transform: scale(0.5);
+      animation: codeReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    }
+    @keyframes codeReveal {
+      0%   { opacity: 0; transform: scale(0.5); filter: blur(30px); }
+      100% { opacity: 1; transform: scale(1);   filter: blur(0px);  }
+    }
+
+    /* ---- Glitch secondary number ---- */
+    .code-glitch {
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      font: inherit;
+      color: #FF6B00;
+      opacity: 0;
+      clip-path: inset(40% 0 30% 0);
+      animation: glitch 3s ease-in-out infinite;
+    }
+    @keyframes glitch {
+      0%, 90%, 100% { opacity: 0; transform: translateX(-50%) translate(0); }
+      91% { opacity: 0.3; transform: translateX(-50%) translate(-3px, 1px); }
+      93% { opacity: 0.3; transform: translateX(-50%) translate(3px, -1px); }
+      95% { opacity: 0.25; transform: translateX(-50%) translate(-2px);  }
+      97% { opacity: 0.2; transform: translateX(-50%) translate(2px, 1px);  }
+      99% { opacity: 0.1; transform: translateX(-50%) translate(0); }
+    }
+
+    /* ---- Tagline ---- */
+    .tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6875rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #FF6B00;
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+
+    /* ---- Message ---- */
+    .message {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: #999999;
+      margin-top: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+    }
+
+    /* ---- Sub message ---- */
+    .sub {
+      font-size: 0.9375rem;
+      color: #666666;
+      margin-top: 0.875rem;
+      line-height: 1.6;
+      max-width: 420px;
+      margin-inline: auto;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+    }
+
+    /* ---- Button ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      margin-top: 2.5rem;
+      padding: 0.875rem 2.25rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      background: #FF6B00;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
+    }
+    .btn:hover {
+      box-shadow: 0 0 48px rgba(255,107,0,0.45);
+      transform: translateY(-1px);
+    }
+    .btn:active { transform: translateY(0); }
+    .btn .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .btn:hover .arrow { transform: translateX(3px); }
+
+    /* ---- Floating dots ---- */
+    .dot {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      background: rgba(255,107,0,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    @keyframes fadeUp {
+      0%   { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Scan line effect ---- */
+    .scanline {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255,107,0,0.1) 2px,
+        rgba(255,107,0,0.1) 4px
+      );
+    }
+
+    /* ---- Loading bar ---- */
+    .loading-bar {
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #FF6B00, transparent);
+      margin: 1.5rem auto 0;
+      opacity: 0;
+      animation: loadBar 2s ease-in-out 1.5s forwards;
+    }
+    @keyframes loadBar {
+      0%   { width: 0; opacity: 0; }
+      20%  { opacity: 0.8; }
+      100% { width: 180px; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="scanline"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- Floating dots -->
+  <div id="dots"></div>
+
+  <div class="container">
+    <div style="position: relative; display: inline-block;">
+      <div class="code">404</div>
+      <div class="code-glitch">404</div>
+    </div>
+
+    <p class="tagline">Error &bull; Not Found</p>
+    <h1 class="message">这个页面去远行了</h1>
+    <p class="sub">
+      你寻找的页面可能已被移除、链接失效，<br />或者它从未在这个维度存在过。
+    </p>
+
+    <a href="/" class="btn">
+      <span>返回首页</span>
+      <span class="arrow">&rarr;</span>
+    </a>
+
+    <div class="loading-bar"></div>
+  </div>
+
+  <script>
+    // Floating dots — spawn on load
+    (function() {
+      var dots = document.getElementById('dots');
+      var count = 30;
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < count; i++) {
+        var d = document.createElement('div');
+        d.className = 'dot';
+        d.style.left = Math.random() * 100 + '%';
+        d.style.top  = Math.random() * 100 + '%';
+        d.style.animationDelay = Math.random() * 4 + 's';
+        d.style.animation = 'fadeUp ' + (2 + Math.random() * 3) + 's ease-in-out infinite alternate';
+        d.style.opacity = (0.15 + Math.random() * 0.35).toString();
+        frag.appendChild(d);
+      }
+      dots.appendChild(frag);
+    })();
+
+    // Keyboard easter egg: type "404" → replay animation
+    (function() {
+      var buffer = '';
+      document.addEventListener('keydown', function(e) {
+        buffer += e.key;
+        if (buffer.length > 3) buffer = buffer.slice(-3);
+        if (buffer === '404') {
+          var code = document.querySelector('.code');
+          code.style.animation = 'none';
+          code.offsetHeight; // trigger reflow
+          code.style.animation = 'codeReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

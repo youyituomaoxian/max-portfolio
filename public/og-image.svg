@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+  <!-- Grid -->
+  <g opacity="0.03">
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="white" stroke-width="0.5" />
+    <line x1="0" y1="30" x2="1200" y2="30" stroke="white" stroke-width="0.5" />
+    <line x1="0" y1="60" x2="1200" y2="60" stroke="white" stroke-width="0.5" />
+  </g>
+  <!-- Orange glow -->
+  <circle cx="200" cy="315" r="250" fill="#FF6B00" opacity="0.06"/>
+  <circle cx="1000" cy="315" r="200" fill="#FF8A33" opacity="0.04"/>
+  <!-- Name -->
+  <text x="600" y="240" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="80" font-weight="700" fill="white">马守坤</text>
+  <!-- Name EN -->
+  <text x="600" y="310" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="36" font-weight="500" fill="#FF6B00">Ma Shoukun</text>
+  <!-- Description -->
+  <text x="600" y="380" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" fill="#999999">视觉设计师 / AI设计师 / 品牌设计师</text>
+  <!-- Line -->
+  <line x1="540" y1="410" x2="660" y2="410" stroke="#FF6B00" stroke-width="2" opacity="0.5"/>
+  <!-- URL -->
+  <text x="600" y="440" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="#666666">mask-portfolio.pages.dev</text>
+</svg>

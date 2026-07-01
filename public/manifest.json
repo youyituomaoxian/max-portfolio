@@ -1,0 +1,22 @@
+{
+  "name": "马守坤 · 个人作品集",
+  "short_name": "MS Portfolio",
+  "description": "全链路设计师 — 视觉设计、AI设计、品牌设计",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
