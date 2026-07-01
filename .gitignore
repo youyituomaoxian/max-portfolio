@@ -8,3 +8,8 @@ dist
 *.tsbuildinfo
 Thumbs.db
 *.sw?
+# Admin page: local-only, not deployed
+admin.html
+# Never commit credentials or commands with tokens
+*命令*.txt
+*token*
