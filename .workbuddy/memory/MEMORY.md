@@ -27,8 +27,14 @@
 - 第 5 步 ✅：性能审查优化（2026-06-30）
 - 第 7 步 ✅：移动端适配（2026-06-30）— 汉堡菜单 / 视频降级 / parallax 守卫 / touch 反馈
 - 第 8 步 ✅：SEO + 元数据（2026-06-30）— OG/Twitter/JSON-LD/robots/sitemap/manifest/favicon
-- 第 9 步 ⏳：构建 & 部署
-- 后续计划：后台编辑页面（profile.js 可视化 CRUD）
+- 第 9 步 ✅：构建 & 部署（2026-07-01）— Cloudflare Pages 已上线 max-portfolio-7i0.pages.dev
+- 后续计划：后台编辑页面（profile.js 可视化 CRUD）— 已完成（Admin CMS 7 tab）
+
+## GitHub 自动更新日志规则
+- **README.md** 包含「更新日志」区域（`<!-- WORKBUDDY_UPDATE_LOG -->` 标记之间）
+- **每次通过 WorkBuddy 做实质性修改并推送后**，必须自动在 `<!-- END_WORKBUDDY_UPDATE_LOG -->` 上方追加一条记录
+- 格式：`### YYYY-MM-DD — 简述` + 本次更新的具体内容列表
+- 这是硬性规则，不可跳过
 
 ## 已集成动画
 | 组件 | 来源 | 应用位置 |

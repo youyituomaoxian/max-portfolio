@@ -1391,7 +1391,7 @@ export const navItems = ${JSON.stringify(navItems, null, 2)};
 // Main Admin Component
 // ============================================================
 const TABS = [
-  { id: 'info', label: '简介' },
+  { id: 'info', label: '信息' },
   { id: 'stats', label: '数据' },
   { id: 'experience', label: '经历' },
   { id: 'expertise', label: '能力' },
