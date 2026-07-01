@@ -113,21 +113,30 @@ export default function About() {
         <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-12 gap-16" style={{ opacity: 0 }}>
           {/* Left: Avatar & Stats */}
           <div className="lg:col-span-5">
-            {/* Avatar Placeholder */}
+            {/* Avatar — real image or placeholder */}
             <div ref={avatarRef} className="relative mb-10" style={{ opacity: 0 }}>
               <div className="aspect-[4/5] bg-surface-card border border-surface-border rounded-2xl overflow-hidden relative group">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-surface-card-hover border border-surface-border flex items-center justify-center">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-text-muted">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
-                      </svg>
+                {profile.avatar ? (
+                  <img
+                    src={profile.avatar}
+                    alt={profile.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-surface-card-hover border border-surface-border flex items-center justify-center">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-text-muted">
+                          <circle cx="12" cy="8" r="4" />
+                          <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                        </svg>
+                      </div>
+                      <p className="text-text-muted text-sm font-mono">头像占位</p>
                     </div>
-                    <p className="text-text-muted text-sm font-mono">头像占位</p>
                   </div>
-                </div>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-brand-orange/10 to-transparent" />
+                )}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-brand-orange/10 to-transparent pointer-events-none" />
               </div>
             </div>
 

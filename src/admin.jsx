@@ -483,6 +483,23 @@ function InfoTab({ data, onChange }) {
         <textarea style={styles.textarea} value={data.bio || ''} onChange={(e) => onChange(updateNested(data, 'bio', e.target.value))} placeholder="介绍自己..." />
       </div>
       <div style={styles.fieldGroup}>
+        <label style={styles.label}>个人头像</label>
+        <MediaFileInput
+          value={data.avatar || ''}
+          onChange={(v) => onChange(updateNested(data, 'avatar', v || null))}
+          accept="image/*"
+          placeholder="/images/avatar.jpg"
+          hint="📁 请将头像图片放到 public/images/ 目录。留空则显示默认占位图标。"
+        />
+        {data.avatar && (
+          <div style={{ marginTop: 8, width: 80, height: 100, borderRadius: 8, overflow: 'hidden', border: '1px solid #333' }}>
+            <img src={data.avatar} alt="头像预览" style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          </div>
+        )}
+      </div>
+      <div style={styles.fieldGroup}>
         <label style={styles.label}>Hero 视频背景</label>
         <MediaFileInput
           value={data.heroVideo || ''}

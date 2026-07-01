@@ -12,6 +12,7 @@ const _baseProfile = {
   "name": "马守坤",
   "nameEn": "Ma Shoukun",
   "heroVideo": "/videos/hero-bg.mp4",
+  "avatar": null,
   "roles": [
     "视觉设计师",
     "AI设计师",
