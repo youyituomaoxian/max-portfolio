@@ -1,3 +1,3 @@
-# Keep admin.html accessible (prevent Cloudflare SPA redirect)
-/admin.html /admin.html 200
-/admin /admin.html 200
+# Prevent clean-url redirect from breaking admin.html
+/admin.html /admin.html 200!
+
