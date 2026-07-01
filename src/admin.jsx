@@ -1393,31 +1393,14 @@ function Admin() {
   const [loadError, setLoadError] = useState(null);
 
   // --- Initial load ---
-  // Dev: fetch profile.js raw source for parsing; Prod: fallback to bundled module import
+  // Use bundled module import directly (works in both dev and production)
   useEffect(() => {
-    const dataPath = import.meta.env.BASE_URL + 'src/data/profile.js';
-    fetch(dataPath)
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.text();
-      })
-      .then((text) => {
-        const parsed = parseProfileFromSource(text);
-        const result = validateProfile(parsed);
-        if (!result.valid) throw new Error('数据格式验证失败: ' + result.error);
-        setData(parsed);
-        setLoading(false);
-      })
-      .catch(() => {
-        // Production: profile.js is bundled, fall back to module import
-        if (_profileModule && _profileModule.contact) {
-          setData(structuredClone(_profileModule));
-          setLoading(false);
-        } else {
-          setLoadError('数据加载失败 — 请确认 profile.js 存在');
-          setLoading(false);
-        }
-      });
+    if (_profileModule && _profileModule.contact) {
+      setData(structuredClone(_profileModule));
+    } else {
+      setLoadError('数据加载失败 — profile 模块导入异常');
+    }
+    setLoading(false);
   }, []);
 
   // --- Handlers ---
