@@ -1,3 +1,0 @@
-# Prevent clean-url redirect from breaking admin.html
-/admin.html /admin.html 200!
-
