@@ -28,7 +28,7 @@
 - 第 7 步 ✅：移动端适配（2026-06-30）— 汉堡菜单 / 视频降级 / parallax 守卫 / touch 反馈
 - 第 8 步 ✅：SEO + 元数据（2026-06-30）— OG/Twitter/JSON-LD/robots/sitemap/manifest/favicon
 - 第 9 步 ✅：构建 & 部署（2026-07-01）— Cloudflare Pages 已上线 max-portfolio-7i0.pages.dev
-- 后续计划：后台编辑页面（profile.js 可视化 CRUD）— 已完成（Admin CMS 7 tab）
+- 管理面板 ✅：Admin CMS 7 tab 可视化编辑 + 实时预览 + 导出部署（2026-07-01）
 
 ## GitHub 自动更新日志规则
 - **README.md** 包含「更新日志」区域（`<!-- WORKBUDDY_UPDATE_LOG -->` 标记之间）
@@ -96,7 +96,7 @@ src/
 - 已更新文件：tailwind.config.js、index.css、Hero.jsx、About.jsx、Projects.jsx、Expertise.jsx、Contact.jsx、Navbar.jsx
 
 ## Hero 视频背景（2026-06-30）
-- 视频文件：public/videos/hero-bg.mp4（10.46MB，CloudFront CDN 下载）
+- 视频文件：public/videos/hero-bg.mp4（1.8MB，已从 10.46MB 压缩）
 - 播放：autoPlay + muted + loop + playsInline
 - 遮罩：bg-surface-base/75 半透明层确保文字可读性
 

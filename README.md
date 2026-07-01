@@ -6,7 +6,7 @@
 
 ---
 
-## 当前进度：Step 9/9 — 构建 & 部署阶段（2026-07-01）
+## 当前进度：全部完成 ✅（2026-07-01）
 
 - [x] 基础版本 + ReactBits T1+T2 动画 + 对抗审查修复
 - [x] 参考图调风格（紫色 → 橙色系）
@@ -17,7 +17,7 @@
 - [x] 移动端适配（汉堡菜单、视频降级、parallax 守卫、touch 反馈）
 - [x] SEO + 元数据（OG/Twitter/JSON-LD/robots/sitemap/manifest/favicon）
 - [x] 后台管理面板（Admin CMS — 7 tab 可视化编辑 + 实时预览 + 导出部署）
-- [ ] 构建 & 部署
+- [x] 构建 & 部署（Cloudflare Pages: max-portfolio-7i0.pages.dev）
 
 ---
 
@@ -27,7 +27,14 @@
 <!-- 格式：### YYYY-MM-DD — 简述 -->
 <!-- 内容：本次更新的具体内容 -->
 
-> *暂无更新记录。后续每次通过 WorkBuddy 修改并推送后，将自动追加日志条目。*
+### 2026-07-01 — README + 后台补全 + 移动端修复
+- 新增 README.md：项目概述、进度清单、更新日志区域、技术栈、项目结构
+- 后台「信息」tab 标签修正（简介→信息）
+- Admin InfoTab 新增头像上传字段、About 组件支持动态头像渲染
+- ProjectModal 移动端全面适配：返回按钮 + 底部导航 + 字号/间距缩小
+- 建立 WorkBuddy 自动更新日志规则
+
+> *后续每次通过 WorkBuddy 修改并推送后，将在上方自动追加日志条目。*
 
 <!-- END_WORKBUDDY_UPDATE_LOG -->
 
