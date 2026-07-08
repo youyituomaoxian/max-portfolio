@@ -27,6 +27,14 @@
 <!-- 格式：### YYYY-MM-DD — 简述 -->
 <!-- 内容：本次更新的具体内容 -->
 
+### 2026-07-08 — 后台上传落地 + 项目素材按目录 + 图片放大 + 自动压缩
+- 后台媒体上传真正写入 `public/`：新增 Vite 中间件 `POST /__media-upload`，选择文件即落地并预览
+- 项目素材目录重构：图片+视频统一按项目分目录 `public/projects/<projectDir>/`（字段 `projectDir`）
+- 上传图片自动压缩：Sharp resize ≤1920px + mozjpeg q82/PNG palette/WebP q82，典型照片 4MB→200KB
+- 项目详情页图片点击放大（Lightbox）+ 滚轮缩放 50%–500%
+- 修复封面图预览：项目卡片优先显示 `project.image`（封面），无封面时回退画廊第一张
+- 头像文件更新为 `max1.png`
+
 ### 2026-07-01 — 内容更新：英文名、头像、公众号二维码
 - 英文名：Ma Shoukun → Max
 - 头像：新增 `/images/max.png`

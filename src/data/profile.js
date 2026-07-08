@@ -138,11 +138,11 @@ const _baseProfile = {
   "projects": [
     {
       "id": 1,
-      "title": "品牌视觉体系",
-      "category": "品牌设计",
-      "date": "2026-06",
-      "description": "弘讯科技于集团40周年庆的时机，集团统一规范、更新VI手册，有利于更好的适应现在集团的状况，并增强集团形象的宣传。",
-      "image": null,
+      "title": "2024雅式展CHINAPLAS  国际橡塑展",
+      "category": "视觉设计",
+      "date": "2024-03",
+      "description": "本次视觉作品为弘讯科技2024年CHINAPLAS上海国际橡塑展专属展览视觉设计，包含展会主海报、展台墙面展板全套平面视觉物料，整体设计围绕弘讯科技深耕橡塑智能装备领域的品牌核心，结合国际橡塑展高端化、专业化、科技化的展会属性展开创作。",
+      "image": "/projects/2024雅式展/【20240125】户外海报_画板 1.jpg",
       "tags": [
         "VI系统",
         "Logo设计",
@@ -150,16 +150,18 @@ const _baseProfile = {
       ],
       "gallery": [
         {
-          "image": "https://picsum.photos/seed/brand1/1200/675",
-          "caption": "品牌色彩系统 — 以橙色为主色调构建完整的品牌视觉语言，从Logo图形到UI组件的色彩映射，确保各触点视觉一致。"
+          "image": "/projects/2024雅式展/【20240417】邀请函e4.jpg",
+          "caption": "面向客户与合作伙伴的邀约物料。以深蓝封面承载展会信息与企业标识，内页简明列出时间、展位与亮点预告，版式精致、留白舒展。整体克制而有礼，兼顾品牌调性与阅读效率，承担展前引流与关系维护的轻量触达。",
+          "aspect": "portrait"
         },
         {
-          "video": "/videos/hero-bg.mp4",
-          "aspect": "portrait",
-          "image": "https://picsum.photos/seed/brand-v/900/1600",
-          "caption": "竖版视频示例 — 居中显示，背景自动模糊填充，保持视觉对齐。"
+          "video": "",
+          "aspect": "landscape",
+          "image": "/projects/2024雅式展/【20240125】户外海报_画板 1.jpg",
+          "caption": "户外主视觉海报，用于展会户外及交通枢纽广告投放。整幅以深蓝科技主色铺底，弘讯品牌标识居于上方黄金位置，中央核心产品轮廓与超大字号标题形成强烈对比，留白克制、版式大气，于十米外仍清晰可读。"
         }
-      ]
+      ],
+      "projectDir": "2024雅式展"
     },
     {
       "id": 2,
@@ -411,7 +413,7 @@ const _baseProfile = {
       }
     ]
   },
-  "avatar": "/images/max.png"
+  "avatar": "/images/max1.png"
 };
 
 export const profile = _previewData || _baseProfile;

@@ -8,6 +8,7 @@
 - **样式**：Tailwind CSS 3（自定义暗色科技风主题）
 - **动画**：GSAP + ScrollTrigger + @gsap/react + motion
 - **组件库**：ReactBits（手动复制源码，非 npm 包），位于 `src/components/reactbits/`
+- **图片压缩**：sharp（上传时自动 resize ≤1920px + mozjpeg q82 / PNG palette / WebP q82，仅 dev server）
 - **字体**：Space Grotesk + Inter + JetBrains Mono
 
 ## 设计系统
@@ -72,12 +73,13 @@ src/
 ```
 
 ## 关键约定
-- 内容资产（图片/视频/文案）全部使用占位符，后期替换
+- 内容资产初期用占位符，现已逐步替换为真实素材（头像 / Hero 视频 / 项目图片）
 - 设计系统由 AI 根据项目类型自行决定，未手动定义 token 表
 - 品牌色已确定：橙色系 #FF6B00
 - 浏览器预览端口：不固定（当前 5175，取决于占用情况）
 - 所有 section 组件 GSAP useEffect 必须有 cleanup（`stModule.getAll().kill()`）
 - body scroll 锁必须用 `src/utils/bodyScrollLock.js` 引用计数，禁止直接设 `body.style.overflow`
+- 项目素材目录约定：项目内图片+视频统一放 `public/projects/<projectDir>/`（由 admin 字段 `projectDir` 控制）；全局素材（头像 / Hero 视频 / 能力图标 / 二维码）维持 `public/images/`、`public/videos/`，不按项目分
 
 ## 审查修复纪要（2026-06-30）
 - ErrorBoundary 覆盖全部 6 个 section（单 section 崩溃不影响整站）
@@ -115,9 +117,13 @@ src/
 - 纯后台管理，无预览面板（第一性原理：编辑=后台，预览=独立标签页打开 /）
 - Tab 居中排列，编辑器全宽 960px 居中
 - 能力图标：48×48 实时预览 + emoji/路径输入 + 📁 文件上传 + ✕ 清除
-- 项目媒体：本地文件上传（非 URL），素材存放提示（public/images/ public/videos/）
+- 项目媒体：本地文件上传（非 URL），经 Vite 中间件 `POST /__media-upload` **真正写入** `public/`；项目素材统一 `public/projects/<projectDir>/`（图片+视频混放，字段 `projectDir` 控制），全局素材维持 images/videos；仅 dev server 生效（admin 本地工具）
 - 联系模块：动态列表，支持增删改类型（微信→QQ、站酷→公众号），双重模式(链接跳转/二维码上传)
 - 数据源：profile.js 运行时检测 sessionStorage（支持预览覆盖），admin 通过 parseProfileFromSource 双策略解析
 - **实时预览**：admin 头部「👁 实时预览」按钮 → 写 sessionStorage → 新标签打开 / （即时生效，不依赖文件）
 - **Vite 缓存防护**：vite.config.js 已配置 `server.watch: { usePolling: true, interval: 500 }`
 - **工作流**：编辑→实时预览(sessionStorage) → 导出 profile.js(文件) → 部署，两条路径分离
+
+## 交互增强（2026-07-08）
+- ProjectModal 图片点击放大（Lightbox）：点击图片全屏放大，点击图片外区域 / Esc 关闭
+- Lightbox 滚轮缩放（scale 0.5–5，每格 ±0.15，原生非被动监听阻止背景滚动），底部显示当前百分比

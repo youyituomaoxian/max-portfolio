@@ -817,15 +817,51 @@ function ToolsTab({ data, onChange }) {
 }
 
 // --- Media File Input Component ---
-function MediaFileInput({ value, onChange, accept, placeholder, hint }) {
+function MediaFileInput({ value, onChange, accept, placeholder, hint, folder }) {
   const fileRef = useRef(null);
 
-  const handleFile = (e) => {
+  const handleFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Generate the expected path under public/
-    const path = `${accept === 'video/*' ? '/videos/' : '/images/'}${file.name}`;
-    onChange(path);
+    // 项目素材：图片 + 视频统一归入 public/projects/<folder>/
+    const dir = folder
+      ? `projects/${folder.replace(/^\/+|\/+$/g, '')}`
+      : accept === 'video/*'
+        ? 'videos'
+        : 'images';
+    const relPath = `/${dir}/${file.name}`;
+    try {
+      // 大文件（>15MB）走路径模式，避免 base64 POST 卡顿
+      if (file.size > 15 * 1024 * 1024) {
+        onChange(relPath);
+        alert(`文件较大（${Math.round(file.size / 1024 / 1024)}MB），已生成路径，请手动将文件放入 public${relPath}`);
+        return;
+      }
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const resp = await fetch('/__media-upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dir, name: file.name, dataUrl })
+      });
+      const json = await resp.json();
+      if (json.ok) {
+        onChange(json.path);
+      } else {
+        onChange(relPath); // 上传被拒，回退路径模式
+        console.warn('媒体上传失败：', json.error);
+      }
+    } catch (err) {
+      // 上传异常回退到路径模式，提示用户手动放置
+      onChange(relPath);
+      alert(`自动上传失败（${err}），已生成路径，请将文件手动放入 public${relPath}`);
+    } finally {
+      e.target.value = ''; // 允许重复选择同名文件
+    }
   };
 
   return (
@@ -878,7 +914,7 @@ function ProjectsTab({ data, onChange }) {
         <span style={{ fontSize: 14, color: '#999' }}>{items.length} 个项目</span>
         <button
           style={{ ...styles.btn, ...styles.btnOutline, ...styles.btnSmall }}
-          onClick={() => onChange(updateNested(data, 'projects', arrayPrepend(items, { id: maxId + 1, title: '新项目', category: allCategories[0] || '视觉设计', date: '2026-01', description: '', image: null, tags: [], gallery: [] })))}
+          onClick={() => onChange(updateNested(data, 'projects', arrayPrepend(items, { id: maxId + 1, title: '新项目', category: allCategories[0] || '视觉设计', date: '2026-01', description: '', image: null, projectDir: '', tags: [], gallery: [] })))}
         >
           + 添加项目
         </button>
@@ -886,9 +922,9 @@ function ProjectsTab({ data, onChange }) {
       {/* Media assets hint */}
       <div style={{ padding: '10px 14px', background: 'rgba(255,107,0,0.06)', borderRadius: 8, marginBottom: 16, border: '1px solid rgba(255,107,0,0.12)', fontSize: 12, color: '#888', lineHeight: 1.8 }}>
         <div style={{ color: '#FF8A33', fontWeight: 600, marginBottom: 4 }}>📁 媒体素材存放说明</div>
-        图片请放置到 <code style={{ color: '#FF8A33', background: '#111', padding: '2px 6px', borderRadius: 4 }}>public/images/</code> 目录<br />
-        视频请放置到 <code style={{ color: '#FF8A33', background: '#111', padding: '2px 6px', borderRadius: 4 }}>public/videos/</code> 目录<br />
-        路径填写规则：<code style={{ color: '#aaa', background: '#111', padding: '2px 6px', borderRadius: 4 }}>/images/文件名.jpg</code> 或 <code style={{ color: '#aaa', background: '#111', padding: '2px 6px', borderRadius: 4 }}>/videos/文件名.mp4</code>
+        每个项目的<b style={{ color: '#bbb' }}>图片和视频</b>统一放到 <code style={{ color: '#FF8A33', background: '#111', padding: '2px 6px', borderRadius: 4 }}>public/projects/&lt;项目目录&gt;/</code>（在下方「项目素材目录」填写目录名，例如 <code style={{ color: '#FF8A33', background: '#111', padding: '2px 6px', borderRadius: 4 }}>brand-visual</code>）<br />
+        不按素材类型分目录，一个项目一个文件夹，图片与视频混放<br />
+        全局素材（头像 / Hero 视频 / 能力图标 / 二维码）仍放 <code style={{ color: '#FF8A33', background: '#111', padding: '2px 6px', borderRadius: 4 }}>public/images/</code> 与 <code style={{ color: '#FF8A33', background: '#111', padding: '2px 6px', borderRadius: 4 }}>public/videos/</code>
       </div>
       {items.map((proj, i) => {
         const tags = Array.isArray(proj.tags) ? proj.tags : [];
@@ -934,6 +970,30 @@ function ProjectsTab({ data, onChange }) {
               <textarea style={styles.textarea} value={proj.description || ''} onChange={(e) => updateItem(i, { description: e.target.value })} />
             </div>
             <div style={styles.fieldGroup}>
+              <label style={styles.label}>项目素材目录（可选）</label>
+              <input style={styles.input} value={proj.projectDir || ''} onChange={(e) => updateItem(i, { projectDir: e.target.value })} placeholder="例如 brand-visual（本项目图片+视频将存到 public/projects/brand-visual/）" />
+              <div style={{ fontSize: 11, color: '#555', marginTop: 4, lineHeight: 1.5 }}>
+                📁 留空则素材直接放 <code style={{ color: '#FF8A33', background: '#111', padding: '1px 5px', borderRadius: 3 }}>public/images/</code>；填写后本项目<b style={{ color: '#bbb' }}>所有图片与视频</b>自动归入 <code style={{ color: '#FF8A33', background: '#111', padding: '1px 5px', borderRadius: 3 }}>public/projects/{proj.projectDir || '目录名'}/</code>
+              </div>
+            </div>
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>封面图（项目列表缩略图）</label>
+              <MediaFileInput
+                value={proj.image || ''}
+                onChange={(v) => updateItem(i, { image: v })}
+                accept="image/*"
+                folder={proj.projectDir}
+                placeholder={proj.projectDir ? `例如 /projects/${proj.projectDir}/cover.jpg` : '例如 /images/project-cover.jpg'}
+                hint={proj.projectDir ? `📁 封面图将保存到 public/projects/${proj.projectDir}/ 目录` : '📁 请将封面图放到 public/images/ 目录'}
+              />
+              {proj.image && (
+                <div style={styles.thumbWrap} title="点击查看大图" onClick={() => window.open(proj.image, '_blank')}>
+                  <img src={proj.image} alt="" style={styles.thumbImg} />
+                  <div style={styles.thumbInfo}><div style={styles.thumbUrl}>{proj.image}</div></div>
+                </div>
+              )}
+            </div>
+            <div style={styles.fieldGroup}>
               <label style={styles.label}>标签（逗号分隔）</label>
               <TagsInput value={tags} onChange={(newTags) => updateItem(i, { tags: newTags })} />
             </div>
@@ -971,8 +1031,9 @@ function ProjectsTab({ data, onChange }) {
                         value={g.image || ''}
                         onChange={(v) => { const ng = structuredClone(gallery); ng[gi] = { ...ng[gi], image: v }; updateItem(i, { gallery: ng }); }}
                         accept="image/*"
-                        placeholder="例如 /images/project-01.jpg"
-                        hint="📁 请将图片文件放到 public/images/ 目录，左侧路径相对于 public 根目录"
+                        folder={proj.projectDir}
+                        placeholder={proj.projectDir ? `例如 /projects/${proj.projectDir}/cover.jpg` : '例如 /images/project-01.jpg'}
+                        hint={proj.projectDir ? `📁 图片将保存到 public/projects/${proj.projectDir}/ 目录` : '📁 请将图片文件放到 public/images/ 目录，左侧路径相对于 public 根目录'}
                       />
                       {g.image && (
                         <div style={styles.thumbWrap} onClick={() => window.open(g.image, '_blank')} title="点击查看大图">
@@ -999,8 +1060,9 @@ function ProjectsTab({ data, onChange }) {
                         value={g.video || ''}
                         onChange={(v) => { const ng = structuredClone(gallery); ng[gi] = { ...ng[gi], video: v }; updateItem(i, { gallery: ng }); }}
                         accept="video/*"
-                        placeholder="例如 /videos/hero-bg.mp4"
-                        hint="📁 请将视频文件放到 public/videos/ 目录"
+                        folder={proj.projectDir}
+                        placeholder={proj.projectDir ? `例如 /projects/${proj.projectDir}/clip.mp4` : '例如 /videos/clip.mp4'}
+                        hint={proj.projectDir ? `📁 视频将保存到 public/projects/${proj.projectDir}/ 目录（与图片同目录）` : '📁 请将视频文件放到 public/videos/ 目录'}
                       />
                     </div>
                   )}

@@ -12,7 +12,7 @@ export default function ProjectModal({ project, projects, currentIndex, onClose,
   useEffect(() => {
     lockBodyScroll();
     const handleKey = (e) => {
-      if (e.key === 'Escape') callbacksRef.current.onClose();
+      if (e.key === 'Escape') { if (zoomScaleRef.current > 1) setZoomScale(1); else if (zoomRef.current) setZoomedImage(null); else callbacksRef.current.onClose(); }
       if (e.key === 'ArrowLeft') callbacksRef.current.onPrev();
       if (e.key === 'ArrowRight') callbacksRef.current.onNext();
     };
@@ -43,6 +43,28 @@ export default function ProjectModal({ project, projects, currentIndex, onClose,
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < projects.length - 1;
   const hasGallery = Array.isArray(project.gallery) && project.gallery.length > 0;
+
+  // 图片点击放大（Lightbox）状态
+  const [zoomedImage, setZoomedImage] = useState(null);
+  const zoomRef = useRef(null);
+  zoomRef.current = zoomedImage;
+  const [zoomScale, setZoomScale] = useState(1);
+  const zoomScaleRef = useRef(1);
+  zoomScaleRef.current = zoomScale;
+  const lightboxRef = useRef(null);
+  const openZoom = (src) => { setZoomedImage(src); setZoomScale(1); };
+
+  // 滚轮缩放（非被动监听，阻止背景滚动）
+  useEffect(() => {
+    const el = lightboxRef.current;
+    if (!el || !zoomedImage) return;
+    const onWheel = (e) => {
+      e.preventDefault();
+      setZoomScale((s) => Math.min(5, Math.max(0.5, s + (e.deltaY < 0 ? 0.15 : -0.15))));
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [zoomedImage]);
 
   return (
     <div ref={overlayRef} className="fixed inset-0 z-[100] overflow-y-auto no-scrollbar" onClick={onClose}>
@@ -128,7 +150,7 @@ export default function ProjectModal({ project, projects, currentIndex, onClose,
         {hasGallery && (
           <div className="space-y-10 md:space-y-16">
             {project.gallery.map((item, idx) => (
-              <GalleryItem key={idx} item={item} projectTitle={project.title} />
+              <GalleryItem key={idx} item={item} projectTitle={project.title} onZoom={openZoom} />
             ))}
           </div>
         )}
@@ -149,6 +171,26 @@ export default function ProjectModal({ project, projects, currentIndex, onClose,
           </button>
         </div>
       </div>
+
+      {/* ===== 图片放大预览（Lightbox） ===== */}
+      {zoomedImage && (
+        <div
+          ref={lightboxRef}
+          className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-12 bg-black/92 backdrop-blur-md overflow-hidden"
+          onClick={(e) => { e.stopPropagation(); setZoomedImage(null); }}
+        >
+          <img
+            src={zoomedImage}
+            alt="放大预览"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none"
+            onClick={(e) => e.stopPropagation()}
+            style={{ cursor: zoomScale > 1 ? 'zoom-out' : 'default', transform: `scale(${zoomScale})`, transformOrigin: 'center center', transition: 'transform 0.12s ease-out' }}
+          />
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-text-muted text-xs font-mono pointer-events-none bg-surface-base/60 px-3 py-1.5 rounded-full backdrop-blur-sm whitespace-nowrap">
+            点击图片以外区域关闭 · 滚轮缩放（{Math.round(zoomScale * 100)}%）
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -156,7 +198,7 @@ export default function ProjectModal({ project, projects, currentIndex, onClose,
 /**
  * 单个画廊项：自动判断图片 / 视频，竖版视频带模糊背景
  */
-function GalleryItem({ item, projectTitle }) {
+function GalleryItem({ item, projectTitle, onZoom }) {
   const isVideo = !!item.video;
   const isPortrait = item.aspect === 'portrait';
 
@@ -169,6 +211,7 @@ function GalleryItem({ item, projectTitle }) {
           <MediaElement
             item={item}
             projectTitle={projectTitle}
+            onZoom={onZoom}
             className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-30"
           />
           {/* 前景清晰内容 */}
@@ -191,13 +234,19 @@ function GalleryItem({ item, projectTitle }) {
   /* 横版默认布局 */
   return (
     <figure className="animate-item">
-      <div className="rounded-xl overflow-hidden">
+      <div className="relative rounded-xl overflow-hidden group">
         <MediaElement
           item={item}
           projectTitle={projectTitle}
+          onZoom={onZoom}
           className="w-full h-auto"
           style={{ maxHeight: '70vh', objectFit: 'contain' }}
         />
+        {item.image && onZoom && (
+          <div className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-surface-base/70 backdrop-blur-sm text-text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" aria-hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+          </div>
+        )}
       </div>
       {item.caption && (
         <figcaption className="mt-4 text-text-secondary text-sm leading-relaxed">
@@ -211,7 +260,7 @@ function GalleryItem({ item, projectTitle }) {
 /**
  * 渲染图片或视频元素
  */
-function MediaElement({ item, projectTitle, className, style }) {
+function MediaElement({ item, projectTitle, className, style, onZoom }) {
   if (item.video) {
     return (
       <video
@@ -243,9 +292,10 @@ function MediaElement({ item, projectTitle, className, style }) {
     <img
       src={item.image}
       alt={item.caption || projectTitle}
-      className={className}
+      className={`${className} ${onZoom ? 'cursor-zoom-in' : ''}`}
       style={style}
       loading="lazy"
+      onClick={onZoom ? (e) => { e.stopPropagation(); onZoom(item.image); } : undefined}
     />
   );
 }

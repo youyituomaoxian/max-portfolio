@@ -295,10 +295,10 @@ function ProjectCard({ project, showDate, onClick }) {
       onClick={onClick}
     >
       <div ref={imageRef} className="relative aspect-[16/10] bg-surface-card-hover overflow-hidden">
-        {/* Gallery image preview with error fallback */}
-        {project.gallery?.[0]?.image && !imgError ? (
+        {/* Cover image (优先封面图 → 回退画廊第一张) with error fallback */}
+        {(project.image || project.gallery?.[0]?.image) && !imgError ? (
           <img
-            src={project.gallery[0].image}
+            src={project.image || project.gallery[0].image}
             alt={project.title}
             className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500"
             loading="lazy"
